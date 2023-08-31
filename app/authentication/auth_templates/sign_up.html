@@ -1,42 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Form content -->
-    <!-- <main class="container p-5"> -->
-    <div class="content-section">
-        <form  method="POST" action="">
-        {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <!-- <legend class="border-bottom mb-4">Sign Up Now!</legend> -->
-                <div class="form-group">
-                    {{ form.first_name.label(class="form=control-label")}}
-                    {{ form.last_name.label(class="form=control form-control-lg")}}
-                </div>
-                <div class="form-group">
-                    {{ form.username.label(class="form=control-label")}}
-                    {{ form.username.label(class="form=control form-control-lg")}}
-                </div>
-                <div class="form-group">
-                    {{ form.email.label(class="form=control-label")}}
-                    {{ form.email.label(class="form=control form-control-lg")}}
-                </div>
-                <div class="form-group">
-                    {{ form.password.label(class="form=control-label")}}
-                    {{ form.password.label(class="form=control form-control-lg")}}
-                </div>
-            
-                <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
-                </div>
-            </fieldset>
-        </form>    
-    </div>
+<main class="container p-5">
+    <div class="row">
+        <aside class="col-12 col-md-6">
+        <h2>Create Your Account</h2>
+        {% include 'signupform.html' %}
+        </aside>
+    </div>   
+</main>
 {% endblock content %}
-            <!-- <div class="row">
-                <aside class="col-12 col-md-6">
-                    <h2>Create Your Account</h2>
-                    {% include 'forms.html' %}
-                </aside>
-            </div>
-        </form>    
-    </main>
+            

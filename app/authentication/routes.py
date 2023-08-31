@@ -7,17 +7,21 @@ from flask_login import login_user, logout_user, LoginManager, current_user, log
 
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
 
-@auth.route('/signup', methods = ['GET', 'POST'])
+@auth.route('/register', methods = ['GET', 'POST'])
 def signup():
     form = UserSignUpForm()
 
     try:
         if request.method == 'POST' and form.validate_on_submit():
+            
+            first_name = form.first_name.data
+            last_name = form.last_name.data
             username = form.username.data
+            email = form.email.data
             password = form.password.data
             print(username, password)
 
-            user = User(username, password = password)
+            user = User(username=username, first_name=first_name, last_name=last_name, email=email, password = password)
 
             db.session.add(user)
             db.session.commit()
@@ -38,6 +42,7 @@ def signin():
     try:
         if request.method == 'POST' and form.validate_on_submit():
             username = form.username.data
+            email = form.email.data
             password = form.password.data
             print(username,password)
 
@@ -45,7 +50,7 @@ def signin():
             if logged_user and check_password_hash(logged_user.password, password):
                 login_user(logged_user)
                 flash('You were successful in your initiation. Congratulations, and welcome to the Jedi Knights', 'auth-success')
-                return redirect(url_for('site.profile'))
+                return redirect(url_for('site.cars'))
             else:
                 flash('You do not have access to this content.', 'auth-failed')
                 return redirect(url_for('auth.signin'))

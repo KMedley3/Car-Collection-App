@@ -21,16 +21,19 @@ class User(db.Model, UserMixin):
     id = db.Column(db.String, primary_key=True)
     first_name = db.Column(db.String(150), nullable=True, default='')
     last_name = db.Column(db.String(150), nullable = True, default = '')
-    email = db.Column(db.String(150), nullable = False)
-    password = db.Column(db.String, nullable = True, default = '')
+    username = db.Column(db.String(20), nullable = False, unique=True, default = '')
+    email = db.Column(db.String(150), nullable = False, unique=True)
+    password = db.Column(db.String(1000), nullable = False, default = '')
     g_auth_verify = db.Column(db.Boolean, default = False)
     token = db.Column(db.String, default = '', unique = True )
     date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    posts = db.relationship('Car', backref='new car', lazy=True)
 
-    def __init__(self, email, first_name='', last_name='', password='', token='', g_auth_verify=False):
+    def __init__(self, email, first_name='', last_name='', username='', password='', token='', g_auth_verify=False):
         self.id = self.set_id()
         self.first_name = first_name
         self.last_name = last_name
+        self.username = username
         self.password = self.set_password(password)
         self.email = email
         self.token = self.set_token(24)
@@ -51,9 +54,10 @@ class User(db.Model, UserMixin):
 
 
 class Car(db.Model):
-    make = db.Column(db.String, primary_key = True)
-    model = db.Column(db.String(150), nullable = False)
-    year = db.Column(db.String(200))
+    id = db.Column(db.String, primary_key = True)
+    make = db.Column(db.String(30), nullable = False)
+    model = db.Column(db.String(30), nullable = False)
+    year = db.Column(db.Integer)
     color = db.Column(db.String(20))
     user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
 
@@ -67,14 +71,14 @@ class Car(db.Model):
 
 
     def __repr__(self):
-        return f'The following car has been added to the collection: {self.make}'
+        return f'The following car has been added to the collection: {self.year}, {self.make}, {self.model}'
 
     def set_id(self):
         return (secrets.token_urlsafe())
 
 class CarSchema(ma.Schema):
     class Meta:
-        fields = ['make', 'model','year','color']
+        fields = ['id','make', 'model','year','color']
 
 car_schema = CarSchema()
 cars_schema = CarSchema(many=True)

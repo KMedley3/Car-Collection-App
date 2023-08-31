@@ -24,7 +24,7 @@ def create_car(current_user_token):
     db.session.add(new_car)
     db.session.commit()
 
-    response = car_schema.dump(new_car)
+    response = cars_schema.dump(new_car)
     return jsonify(response)
 
 @api.route('/cars', methods = ['GET'])
@@ -32,20 +32,20 @@ def create_car(current_user_token):
 def get_car(current_user_token):
     a_user = current_user_token.token
     user_car = Car.query.filter_by(user_token = a_user).all()
-    response = car_schema.dump(user_car)
+    response = cars_schema.dump(user_car)
     return jsonify(response)
 
-@api.route('/cars/<id>', methods = ['GET'])
-@token_required
-def get_single_car(current_user_token, id):
-    car = car.query.get(id)
-    response = car_schema.dump(car)
-    return jsonify(response)
+# @api.route('/cars/<id>', methods = ['GET'])
+# @token_required
+# def get_single_car(current_user_token, id):
+#     car = car.query.get(id)
+#     response = car_schema.dump(car)
+#     return jsonify(response)
 
 
 @api.route('/cars/<id>', methods = ['POST','PUT'])
 @token_required
-def update_contact(current_user_token,id):
+def update_car(current_user_token,id):
     car = Car.query.get(id) 
     car.make = request.json['make']
     car.model = request.json['model']
